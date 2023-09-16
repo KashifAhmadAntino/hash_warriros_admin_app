@@ -1,11 +1,24 @@
 import 'package:election_admin_panel/app_colors.dart';
 import 'package:election_admin_panel/config/routes/app_routes.dart';
+import 'package:election_admin_panel/feature/login/login_controller.dart';
 import 'package:election_admin_panel/image_path.dart';
 import 'package:election_admin_panel/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    Get.put(LoginController());
+  }
 
   @override
   Widget build(BuildContext context) {
