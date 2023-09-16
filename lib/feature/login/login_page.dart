@@ -42,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Image.asset(ImagePath.bgImage)),
                 ),
               ),
+              //
               controller.credentials.value != null
                   ? const Text(
                       "",
