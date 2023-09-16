@@ -14,7 +14,8 @@ class ElectionResult extends StatelessWidget {
           width: 500,
           height: 50,
           margin: const EdgeInsets.all(20),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: AppColors.red35),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10), color: AppColors.red35),
           padding: const EdgeInsets.all(10),
           child: const Center(
             child: Row(
@@ -44,13 +45,13 @@ class ElectionResult extends StatelessWidget {
 class ElectionStats extends StatelessWidget {
   const ElectionStats({
     super.key,
-    required this.voters,
-    required this.candidates,
-    required this.totalVotes,
+    required this.votedUsers,
+    required this.remainingVoters,
+    required this.totalVoters,
   });
-  final int voters;
-  final int candidates;
-  final int totalVotes;
+  final int votedUsers;
+  final int remainingVoters;
+  final int totalVoters;
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +63,11 @@ class ElectionStats extends StatelessWidget {
             const Row(
               children: [
                 Icon(Icons.people),
-                Text("Voters"),
+                Text("Voted Voters"),
               ],
             ),
             Text(
-              voters.toString(),
+              votedUsers.toString(),
               style: const TextStyle(color: AppColors.grey151),
             )
           ],
@@ -82,11 +83,11 @@ class ElectionStats extends StatelessWidget {
             const Row(
               children: [
                 Icon(Icons.person),
-                Text("Candidates"),
+                Text("Remaining Voters"),
               ],
             ),
             Text(
-              candidates.toString(),
+              remainingVoters.toString(),
               style: const TextStyle(color: AppColors.grey151),
             )
           ],
@@ -102,11 +103,11 @@ class ElectionStats extends StatelessWidget {
             const Row(
               children: [
                 Icon(Icons.bar_chart_sharp),
-                Text("Total Votes"),
+                Text("Total Voters"),
               ],
             ),
             Text(
-              totalVotes.toString(),
+              totalVoters.toString(),
               style: const TextStyle(color: AppColors.grey151),
             )
           ],

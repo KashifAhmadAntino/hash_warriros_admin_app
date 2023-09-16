@@ -39,10 +39,6 @@ class DashBoardHome extends StatelessWidget {
                 ),
               ],
             ),
-            const Divider(),
-            const ElectionStats(voters: 10, candidates: 2, totalVotes: 100),
-            const Divider(),
-            const ElectionResult(),
             const GeneralResult(),
           ],
         ),
@@ -62,6 +58,9 @@ class _GeneralResultState extends State<GeneralResult> {
   Timer? timer;
   late IO.Socket socket;
   ValueNotifier<Map> data = ValueNotifier<Map>({});
+  int totalVoters = 0;
+  int remainingVoters = 0;
+  int votedUsers = 0;
   @override
   void initState() {
     super.initState();
@@ -71,6 +70,7 @@ class _GeneralResultState extends State<GeneralResult> {
       "transports": ["websocket"],
       "autoConnect": true,
     });
+    socket.disconnect();
     socket.connect();
     socket.onConnect((_) {
       print('connect');
@@ -94,12 +94,16 @@ class _GeneralResultState extends State<GeneralResult> {
   List<ResultData> resultData = [];
   Color color = const Color.fromARGB(255, 240, 133, 61);
 
-  void getGeneralResultData(Map data) async {
-    var responseData = json.decode(data["data"].toString());
+  void getGeneralResultData(Map<String, dynamic> data) async {
+    var responseData = jsonDecode(jsonEncode(data["data"]));
+
+    totalVoters = responseData['totalUser'] ?? 0;
+    remainingVoters = responseData['remainingUser'] ?? 0;
+    votedUsers = responseData['votedUser'] ?? 0;
+
     try {
-      for (var i = 0; i < responseData["data"]["data"].length; i++) {
-        resultData.add((ResultData.fromJson(json.decode(responseData["data"]["data"][i].toString()))));
-        resultData[i].imageUrl;
+      for (var i = 0; i < responseData["data"].length; i++) {
+        resultData.add((ResultData.fromJson(responseData["data"][i])));
       }
     } catch (e) {
       print(e);
@@ -133,37 +137,52 @@ class _GeneralResultState extends State<GeneralResult> {
 
   @override
   Widget build(BuildContext context) {
-    return _isloading
-        ? const Center(child: CircularProgressIndicator())
-        : SizedBox(
-            child: SfCartesianChart(
-              isTransposed: true,
-              series: <ChartSeries>[
-                BarSeries<dynamic, String>(
-                  color: color,
-                  animationDelay: 10,
-                  isVisible: true,
-                  dataLabelSettings: const DataLabelSettings(isVisible: true),
-                  dataSource: resultData,
-                  // Renders the track
-                  isTrackVisible: true,
-                  xValueMapper: (datum, index) {
-                    return datum.party.toUpperCase();
-                  },
-                  // xValueMapper: (ResultData data, _) => ,
-                  yValueMapper: (data, _) => data.votes,
+    return Column(
+      children: [
+        const Divider(),
+        ElectionStats(
+            votedUsers: votedUsers,
+            remainingVoters: remainingVoters,
+            totalVoters: totalVoters),
+        const Divider(),
+        const ElectionResult(),
+        _isloading
+            ? const Center(child: CircularProgressIndicator())
+            : SizedBox(
+                child: SfCartesianChart(
+                  isTransposed: true,
+                  series: <ChartSeries>[
+                    BarSeries<dynamic, String>(
+                      color: color,
+                      animationDelay: 10,
+                      isVisible: true,
+                      dataLabelSettings:
+                          const DataLabelSettings(isVisible: true),
+                      dataSource: resultData,
+                      // Renders the track
+                      isTrackVisible: true,
+                      xValueMapper: (datum, index) {
+                        return datum.party.toUpperCase();
+                      },
+                      // xValueMapper: (ResultData data, _) => ,
+                      yValueMapper: (data, _) => data.votes,
+                    ),
+                  ],
+                  backgroundColor: const Color.fromARGB(255, 255, 226, 139),
+                  plotAreaBackgroundColor:
+                      const Color.fromARGB(255, 255, 248, 187),
+                  plotAreaBorderColor: Colors.cyan,
+                  primaryYAxis: NumericAxis(
+                      title: AxisTitle(text: "Number of votes ---->"),
+                      isVisible: true),
+                  primaryXAxis: CategoryAxis(
+                    title: AxisTitle(text: "<------- Parties ------->"),
+                    axisLine: const AxisLine(),
+                  ),
+                  title: ChartTitle(text: "ELection updates Live 2024"),
                 ),
-              ],
-              backgroundColor: const Color.fromARGB(255, 255, 226, 139),
-              plotAreaBackgroundColor: const Color.fromARGB(255, 255, 248, 187),
-              plotAreaBorderColor: Colors.cyan,
-              primaryYAxis: NumericAxis(title: AxisTitle(text: "Number of votes ---->"), isVisible: true),
-              primaryXAxis: CategoryAxis(
-                title: AxisTitle(text: "<------- Parties ------->"),
-                axisLine: const AxisLine(),
               ),
-              title: ChartTitle(text: "ELection updates Live 2024"),
-            ),
-          );
+      ],
+    );
   }
 }
