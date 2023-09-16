@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               controller.credentials.value != null
                   ? const Text(
-                      "Credentials Failed",
+                      "",
                       style: TextStyle(color: AppColors.red35),
                     )
                   : const SizedBox(),
@@ -65,7 +65,11 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         },
                         decoration: const InputDecoration(
-                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))), labelText: 'Email', hintText: 'Enter valid email id as abc@gmail.com'),
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            labelText: 'Email',
+                            hintText: 'Enter valid email id as abc@gmail.com'),
                       ),
                     ),
                     SizedBox(
@@ -82,7 +86,12 @@ class _LoginPageState extends State<LoginPage> {
                           }
                           return null;
                         },
-                        decoration: const InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))), labelText: 'Password', hintText: 'Enter secure password'),
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            labelText: 'Password',
+                            hintText: 'Enter secure password'),
                       ),
                     ),
                   ],
@@ -93,7 +102,8 @@ class _LoginPageState extends State<LoginPage> {
                 width: 250,
                 child: ElevatedButton(
                   onPressed: () async {
-                    controller.credentials.value = LogIn(email: _controller1.text, password: _controller2.text);
+                    controller.credentials.value = LogIn(
+                        email: _controller1.text, password: _controller2.text);
                     bool? verify = await controller.verify();
                     print(verify);
                     if (verify == true) {
@@ -127,7 +137,8 @@ class _LoginPageState extends State<LoginPage> {
                 height: 50,
               ),
               InkWell(
-                onTap: () => Navigator.popAndPushNamed(context, AppRoutes.signUp),
+                onTap: () =>
+                    Navigator.popAndPushNamed(context, AppRoutes.signUp),
                 child: const Text('New User? Create Account'),
               )
             ],
