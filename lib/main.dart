@@ -15,9 +15,10 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: Navigation.onGenerateRoutes,
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      initialRoute: "/dashboard",
+      initialRoute: "/",
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 33, 33, 34)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 33, 33, 34)),
         useMaterial3: true,
       ),
     );
